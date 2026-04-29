@@ -35,12 +35,12 @@ const ThankYou = () => {
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button asChild size="lg" className="bg-whatsapp hover:bg-whatsapp/90 text-white font-bold h-14 px-8 animate-pulse-urgent">
-              <a href="https://wa.me/919999999999?text=Hi,%20I%20just%20submitted%20a%20request%20for%20ROC%20Amnesty%20help">
+              <a href="https://wa.me/918169887643?text=Hi,%20I%20just%20submitted%20a%20request%20for%20ROC%20Amnesty%20help">
                 <MessageCircle className="w-5 h-5 mr-2" /> Chat on WhatsApp Now
               </a>
             </Button>
             <Button asChild size="lg" variant="outline" className="border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground font-bold h-14 px-8">
-              <a href="tel:+919999999999">
+              <a href="tel:+918169887643">
                 <Phone className="w-5 h-5 mr-2" /> Call CA Directly
               </a>
             </Button>
@@ -90,7 +90,7 @@ const ThankYou = () => {
 
         {/* Trust line */}
         <div className="mt-8 text-center text-sm text-muted-foreground">
-          📞 Urgent? Call <a href="tel:+919999999999" className="font-bold text-primary">+91 99999 99999</a> · ✉️ <a href="mailto:contact@praveenjca.com" className="font-bold text-primary">contact@praveenjca.com</a>
+          📞 Urgent? Call <a href="tel:+918169887643" className="font-bold text-primary">+91 81698 87643</a> · ✉️ <a href="mailto:contact@praveenjca.com" className="font-bold text-primary">contact@praveenjca.com</a>
         </div>
       </main>
     </div>

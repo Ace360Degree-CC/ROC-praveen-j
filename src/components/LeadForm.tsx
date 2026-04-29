@@ -1,119 +1,130 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { toast } from "sonner";
-import { CheckCircle2, Zap } from "lucide-react";
 
-interface LeadFormProps {
-  variant?: "hero" | "footer" | "popup";
-  onSuccess?: () => void;
+interface Props {
+  variant?: "hero" | "footer";
+  defaultService?: string;
 }
 
-const LeadForm = ({ variant = "hero", onSuccess }: LeadFormProps) => {
+const LEAD_FORM_ENDPOINT = "https://formsubmit.co/ajax/pravreena2026@gmail.com";
+
+const LeadForm = ({ variant = "hero", defaultService = "ROC Amnesty" }: Props) => {
+  const [name, setName] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [email, setEmail] = useState("");
+  const [service, setService] = useState(defaultService);
+  const [stage, setStage] = useState("Late Filing");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [issue, setIssue] = useState("ROC Pending Filing");
-  const [companyType, setCompanyType] = useState("Pvt Ltd");
-  const [issueType, setIssueType] = useState("Late Filing");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!name.trim() || !/^\d{10}$/.test(mobile)) {
+      toast.error("Please enter a valid name and 10-digit mobile number");
+      return;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(email.trim())) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      toast.success("Request received! Our CA team will call you shortly.", {
-        description: "We'll connect on WhatsApp within 30 minutes.",
+
+    try {
+      const formData = new FormData();
+      formData.append("name", name.trim());
+      formData.append("mobile", mobile);
+      formData.append("email", email.trim());
+      formData.append("service", service);
+      formData.append("stage", stage);
+      formData.append("_subject", `New Lead: ${service}`);
+      formData.append("_template", "table");
+      formData.append(
+        "_autoresponse",
+        `Hi ${name.trim()}, thanks for contacting CA Praveen Jain & Team for ${service}. We have received your request and will contact you shortly.`
+      );
+
+      const response = await fetch(LEAD_FORM_ENDPOINT, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+        },
+        body: formData,
       });
-      (e.target as HTMLFormElement).reset();
-      onSuccess?.();
+
+      if (!response.ok) {
+        throw new Error("Failed to submit lead form.");
+      }
+
+      setName("");
+      setMobile("");
+      setEmail("");
+      toast.success("Submitted successfully. We'll contact you shortly.");
       navigate("/thank-you");
-    }, 800);
+    } catch (error) {
+      console.error(error);
+      toast.error("Submission failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3">
-      <div>
-        <Label htmlFor={`name-${variant}`} className="text-sm font-semibold">Name *</Label>
-        <Input id={`name-${variant}`} required placeholder="Your full name" className="mt-1 h-11" />
-      </div>
-      <div>
-        <Label htmlFor={`mobile-${variant}`} className="text-sm font-semibold">Mobile *</Label>
-        <Input
-          id={`mobile-${variant}`}
-          required
-          type="tel"
-          pattern="[0-9]{10}"
-          maxLength={10}
-          placeholder="10-digit mobile number"
-          className="mt-1 h-11"
-        />
-      </div>
-
+    <form onSubmit={onSubmit} className="space-y-3">
+      <Input
+        placeholder="Your Name *"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        maxLength={60}
+        className="h-12 bg-background"
+      />
+      <Input
+        placeholder="Mobile Number *"
+        value={mobile}
+        onChange={(e) => setMobile(e.target.value.replace(/\D/g, "").slice(0, 10))}
+        inputMode="numeric"
+        className="h-12 bg-background"
+      />
+      <Input
+        type="email"
+        placeholder="Email Address *"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        maxLength={120}
+        className="h-12 bg-background"
+      />
+      <Select value={service} onValueChange={setService}>
+        <SelectTrigger className="h-12 bg-background"><SelectValue /></SelectTrigger>
+        <SelectContent>
+          <SelectItem value="ROC Amnesty">ROC Amnesty ✅</SelectItem>
+          <SelectItem value="Compliance Clean-up">Compliance Clean-up</SelectItem>
+          <SelectItem value="CA Consultation">CA Consultation</SelectItem>
+        </SelectContent>
+      </Select>
       {variant === "footer" && (
-        <div>
-          <Label htmlFor="email" className="text-sm font-semibold">Email *</Label>
-          <Input id="email" required type="email" placeholder="you@example.com" className="mt-1 h-11" />
-        </div>
+        <Select value={stage} onValueChange={setStage}>
+          <SelectTrigger className="h-12 bg-background"><SelectValue placeholder="Issue Type" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Late Filing">Late Filing</SelectItem>
+            <SelectItem value="Penalty">Penalty</SelectItem>
+            <SelectItem value="Strike-off Risk">Strike-off Risk</SelectItem>
+          </SelectContent>
+        </Select>
       )}
-
-      {variant !== "popup" && variant !== "footer" && (
-        <div>
-          <Label className="text-sm font-semibold">Issue Type *</Label>
-          <Select value={issue} onValueChange={setIssue}>
-            <SelectTrigger className="mt-1 h-11"><SelectValue /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="ROC Pending Filing">ROC Pending Filing ✅</SelectItem>
-              <SelectItem value="Penalty Issue">Penalty Issue</SelectItem>
-              <SelectItem value="Compliance Issue">Compliance Issue</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      )}
-
-      {variant === "footer" && (
-        <>
-          <div>
-            <Label className="text-sm font-semibold">Company Type *</Label>
-            <Select value={companyType} onValueChange={setCompanyType}>
-              <SelectTrigger className="mt-1 h-11"><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Pvt Ltd">Pvt Ltd</SelectItem>
-                <SelectItem value="LLP">LLP</SelectItem>
-                <SelectItem value="OPC">OPC</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Label className="text-sm font-semibold">Issue *</Label>
-            <Select value={issueType} onValueChange={setIssueType}>
-              <SelectTrigger className="mt-1 h-11"><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Late Filing">Late Filing</SelectItem>
-                <SelectItem value="Penalty">Penalty</SelectItem>
-                <SelectItem value="Strike-off Risk">Strike-off Risk</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </>
-      )}
-
       <Button
         type="submit"
+        variant={variant === "footer" ? "destructive" : "default"}
+        size="lg"
+        className="w-full"
         disabled={loading}
-        className="w-full h-12 text-base font-bold bg-primary hover:bg-primary-dark text-primary-foreground shadow-card animate-pulse-urgent"
       >
-        {loading ? "Submitting..." : variant === "footer" ? "👉 Get Expert Help" : variant === "popup" ? "👉 Save My Company" : "👉 Check Now"}
+        {loading ? "Submitting..." : variant === "footer" ? "👉 Submit & Get Consultation" : "👉 Get Started"}
       </Button>
-
-      <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground pt-1">
-        <Zap className="w-3.5 h-3.5 text-success" />
-        <span>Quick CA response within 30 mins</span>
-        <CheckCircle2 className="w-3.5 h-3.5 text-success" />
-        <span>100% Confidential</span>
-      </div>
+      <p className="text-center text-xs text-muted-foreground">⚡ Quick response guaranteed · 100% Confidential</p>
     </form>
   );
 };

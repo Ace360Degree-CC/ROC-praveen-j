@@ -10,10 +10,10 @@ const StickyCTA = () => {
           asChild
           className="bg-primary hover:bg-primary-dark text-primary-foreground font-bold h-12"
         >
-          <a href="tel:+919999999999"><Phone className="w-4 h-4 mr-1" />Call CA</a>
+          <a href="tel:+918169887643"><Phone className="w-4 h-4 mr-1" />Call CA</a>
         </Button>
         <Button asChild className="bg-whatsapp hover:bg-whatsapp/90 text-white font-bold h-12">
-          <a href="https://wa.me/919999999999?text=Hi,%20I%20need%20help%20with%20ROC%20Amnesty%20Scheme">
+          <a href="https://wa.me/918169887643?text=Hi,%20I%20need%20help%20with%20ROC%20Amnesty%20Scheme">
             <MessageCircle className="w-4 h-4 mr-1" />WhatsApp
           </a>
         </Button>
@@ -21,7 +21,7 @@ const StickyCTA = () => {
 
       {/* Floating WhatsApp - desktop */}
       <a
-        href="https://wa.me/919999999999?text=Hi,%20I%20need%20help%20with%20ROC%20Amnesty%20Scheme"
+        href="https://wa.me/918169887643?text=Hi,%20I%20need%20help%20with%20ROC%20Amnesty%20Scheme"
         target="_blank"
         rel="noreferrer"
         className="hidden md:flex fixed bottom-6 right-6 z-40 items-center gap-2 bg-whatsapp hover:bg-whatsapp/90 text-white font-bold px-5 py-3 rounded-full shadow-elevated animate-pulse-urgent"

@@ -7,14 +7,18 @@ import {
   Sparkles, Users, FileText, Phone, MessageCircle, Star, ArrowRight, Play,
   ClipboardList, Search, FileCheck, RefreshCw, Building2, MapPin, Mail
 } from "lucide-react";
+import { useState } from "react";
 import logo from "@/assets/logo.jpg";
 import founder from "@/assets/founder.png";
+import founder_1 from "@/assets/founder_1.png";
 import LeadForm from "@/components/LeadForm";
 import StickyCTA from "@/components/StickyCTA";
 import ExitPopup from "@/components/ExitPopup";
 import UrgencyTicker from "@/components/UrgencyTicker";
 
 const Index = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const scrollToForm = () => {
     document.getElementById("hero-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
@@ -28,8 +32,8 @@ const Index = () => {
         <div className="container flex items-center justify-between py-3">
           <img src={logo} alt="Praveen J & Associates Chartered Accountants" className="h-10 md:h-12 object-contain" />
           <div className="hidden md:flex items-center gap-3">
-            <a href="tel:+919999999999" className="flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary">
-              <Phone className="w-4 h-4" /> +91 99999 99999
+            <a href="tel:+918169887643" className="flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary">
+              <Phone className="w-4 h-4" /> +91 81698 87643
             </a>
             <Button onClick={scrollToForm} className="bg-primary hover:bg-primary-dark text-primary-foreground font-bold">
               Check Eligibility
@@ -65,17 +69,28 @@ const Index = () => {
             </ul>
 
             {/* Video card */}
-            <div className="relative rounded-2xl overflow-hidden shadow-elevated border-4 border-white/20 bg-black aspect-video group cursor-pointer">
-              <img src={founder} alt="CA Praveen Jain explains MCA ROC Amnesty Scheme" className="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 transition" />
-              <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center shadow-elevated animate-pulse-urgent">
-                  <Play className="w-9 h-9 text-white fill-white ml-1" />
-                </div>
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-                <p className="text-white font-bold">CA Praveen Jain</p>
-                <p className="text-white/80 text-sm">Watch: Amnesty Scheme Explained in 2 mins</p>
-              </div>
+            <div className="relative rounded-2xl overflow-hidden shadow-elevated border-4 border-white/20 bg-black aspect-video group cursor-pointer" onClick={() => setIsPlaying(true)}>
+              {isPlaying ? (
+                <iframe
+                  src="https://www.youtube.com/embed/ZiDKPFht8mI?autoplay=1"
+                  className="w-full h-full"
+                  allow="autoplay; encrypted-media"
+                  allowFullScreen
+                ></iframe>
+              ) : (
+                <>
+                  <img src={founder_1} alt="CA Praveen Jain explains MCA ROC Amnesty Scheme" className="w-full h-full object-cover object-top opacity-90 group-hover:opacity-100 transition" />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                    <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center shadow-elevated animate-pulse-urgent">
+                      <Play className="w-9 h-9 text-white fill-white ml-1" />
+                    </div>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                    <p className="text-white font-bold">CA Praveen Jain</p>
+                    <p className="text-white/80 text-sm">Watch: Amnesty Scheme Explained in 2 mins</p>
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="flex flex-wrap items-center gap-4 text-sm">
@@ -314,7 +329,7 @@ const Index = () => {
               🔴 Check Eligibility Now
             </Button>
             <Button asChild size="lg" variant="outline" className="bg-whatsapp hover:bg-whatsapp/90 border-0 text-white font-bold h-14 px-8 text-base">
-              <a href="https://wa.me/919999999999?text=Hi,%20I%20need%20help%20with%20ROC%20Amnesty%20Scheme">
+              <a href="https://wa.me/918169887643?text=Hi,%20I%20need%20help%20with%20ROC%20Amnesty%20Scheme">
                 <MessageCircle className="w-5 h-5 mr-2" /> Talk to CA
               </a>
             </Button>
@@ -371,7 +386,7 @@ const Index = () => {
             <div>
               <h4 className="font-bold mb-3">Contact</h4>
               <ul className="space-y-2 text-sm opacity-80">
-                <li className="flex items-center gap-2"><Phone className="w-4 h-4" /> +91 99999 99999</li>
+                <li className="flex items-center gap-2"><Phone className="w-4 h-4" /> +91 81698 87643</li>
                 <li className="flex items-center gap-2"><Mail className="w-4 h-4" /> contact@praveenjca.com</li>
                 <li className="flex items-center gap-2"><MapPin className="w-4 h-4" /> Mumbai · Navi Mumbai · Thane · Pune</li>
               </ul>
